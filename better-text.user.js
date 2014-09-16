@@ -122,7 +122,20 @@ function isContentEditable(el) {
   return typeof el.value === 'undefined' && el.contentEditable
 }
 
-function handleKeys(event) {
+window.addEventListener('keydown', function (event) {
+  var selected = getSelectionText() || ''
+    , target = event.target
+    , value = target.value
+
+  // it's not an input...
+  if (typeof value === 'undefined') {
+    if (isContentEditable(target)) {
+      value = target.innerText
+    } else {
+      return
+    }
+  }
+
   switch (event.keyCode) {
     case 57: // 9 or (
       if (event.shiftKey) {
@@ -152,21 +165,4 @@ function handleKeys(event) {
       event.preventDefault()
       break
   }
-}
-
-window.addEventListener('keydown', function (event) {
-  var selected = getSelectionText() || ''
-    , target = event.target
-    , value = target.value
-
-  // it's not an input...
-  if (typeof value === 'undefined') {
-    if (isContentEditable(target)) {
-      value = target.innerText
-    } else {
-      return
-    }
-  }
-
-  handleKeys(event)
 }, true)
