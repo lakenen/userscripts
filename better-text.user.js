@@ -127,8 +127,8 @@ function handleKeys(event) {
     case 57: // 9 or (
       if (event.shiftKey) {
         replaceSelectedText(target, '(' + selected + ')')
+        event.preventDefault()
       }
-      event.preventDefault()
       break
     case 219: // [ or {
       if (event.shiftKey) {
