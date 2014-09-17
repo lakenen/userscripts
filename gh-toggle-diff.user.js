@@ -11,7 +11,7 @@
   btn.classList.add('minibutton')
   btn.innerText = 'Toggle'
   btn.addEventListener('click', function () {
-    var inner = fileEl.querySelector('.data,.image')
+    var inner = fileEl.querySelector('.data,.image,.render-wrapper')
     if (inner) {
       inner.classList.toggle('hidden')
     }
