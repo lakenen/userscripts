@@ -49,8 +49,11 @@ function insertIntoEmail(html) {
   var p = document.createElement('p')
   p.innerHTML = html
 
+  // relative fix links...
   Array.prototype.forEach.call(p.querySelectorAll('a'), function (a) {
-    a.href = 'http://beeradvocate.com' + a.href.replace('https://mail.google.com', '')
+    if (a.hostname === 'mail.google.com') {
+      a.href = 'http://beeradvocate.com' + a.pathname + a.search + a.hash
+    }
   })
 
   getInsertNode().appendChild(p)
