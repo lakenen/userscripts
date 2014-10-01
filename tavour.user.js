@@ -66,6 +66,8 @@ function findBeer(name) {
     if (beerEls.length) {
       var url = beerEls[0].querySelector('a').href
       getBeerInfo(url, insertIntoEmail)
+    } else {
+      insertIntoEmail('<h2>Beer Not Found :(</h2>')
     }
   })
 }
