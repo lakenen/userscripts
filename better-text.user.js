@@ -136,10 +136,18 @@ window.addEventListener('keydown', function (event) {
     }
   }
 
+  // TODO: deleting stuff (backspace is keyCode 8)
+
   switch (event.keyCode) {
     case 57: // 9 or (
       if (event.shiftKey) {
         replaceSelectedText(target, '(' + selected + ')')
+        event.preventDefault()
+      }
+      break
+    case 192: // ` or ~
+      if (!event.shiftKey) {
+        replaceSelectedText(target, '`' + selected + '`')
         event.preventDefault()
       }
       break
