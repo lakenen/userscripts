@@ -6,6 +6,8 @@
 // ==/UserScript==
 
 var URL_PREFIX = 'https://cors-anywhere.herokuapp.com/'
+var currentBeerName
+setInterval(check, 500)
 
 function makeRequest(url, cb) {
   var r = new XMLHttpRequest()
@@ -78,19 +80,17 @@ function findInHTML(html, selector) {
   return [].slice.call(doc && doc.querySelectorAll(selector) || [])
 }
 
-var current
 function check() {
   if (isOnTavourEmail()) {
-    if (!current) {
-      current = getBeerName()
+    if (!currentBeerName) {
+      currentBeerName = getBeerName()
 
-      if (current) {
-        findBeer(current)
+      if (currentBeerName) {
+        findBeer(currentBeerName)
       }
     }
   } else {
-    current = null
+    currentBeerName = null
   }
 }
 
-setInterval(check, 500)
