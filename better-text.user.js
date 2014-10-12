@@ -33,7 +33,7 @@ function getCaretPosition(element) {
       , preCaretRange
       , textRange
       , preCaretTextRange
-    if (typeof win.getSelection != "undefined") {
+    if (typeof win.getSelection != undefined) {
         sel = win.getSelection()
         if (sel.rangeCount > 0) {
             range = win.getSelection().getRangeAt(0)
@@ -42,11 +42,11 @@ function getCaretPosition(element) {
             preCaretRange.setEnd(range.endContainer, range.endOffset)
             caretOffset = preCaretRange.toString().length
         }
-    } else if ( (sel = doc.selection) && sel.type != "Control") {
+    } else if ( (sel = doc.selection) && sel.type != Control) {
         textRange = sel.createRange()
         preCaretTextRange = doc.body.createTextRange()
         preCaretTextRange.moveToElementText(element)
-        preCaretTextRange.setEndPoint("EndToEnd", textRange)
+        preCaretTextRange.setEndPoint(EndToEnd, textRange)
         caretOffset = preCaretTextRange.text.length
     }
     return caretOffset
@@ -118,14 +118,45 @@ function setCaretToPos(el, pos) {
   }
 }
 
+function createSelection(field, start, end) {
+  // for input type elements
+  if (field.createTextRange) {
+    var selRange = field.createTextRange()
+    selRange.collapse(true)
+    selRange.moveStart('character', start)
+    selRange.moveEnd('character', end)
+    selRange.select()
+    field.focus()
+  } else if (field.setSelectionRange) {
+    // works in chrome
+    field.focus()
+    field.setSelectionRange(start, end)
+  } else if (typeof field.selectionStart !== 'undefined') {
+    field.selectionStart = start
+    field.selectionEnd = end
+    field.focus()
+  }
+
+  // TODO: make this work for contenteditable
+}
+
 function isContentEditable(el) {
   return typeof el.value === 'undefined' && el.contentEditable
+}
+
+var autoWrappingTypes = {
+    '{': '}'
+  , '[': ']'
+  , '(': ')'
+  , '"': '"'
+  , '\'': '\''
 }
 
 window.addEventListener('keydown', function (event) {
   var selected = getSelectionText() || ''
     , target = event.target
     , value = target.value
+    , start = target.selectionStart || getCaretPosition(target)
 
   // it's not an input...
   if (typeof value === 'undefined') {
@@ -140,6 +171,16 @@ window.addEventListener('keydown', function (event) {
   // console.log(event.keyCode)
 
   switch (event.keyCode) {
+    case 8: // backspace
+      if (!selected) {
+        var prevChar = value.charAt(start - 1)
+          , nextChar = value.charAt(start)
+        if (autoWrappingTypes[prevChar] === nextChar) {
+          createSelection(target, start, start + 1)
+          replaceSelectedText(target, '')
+        }
+      }
+      break
     case 56: // 8 or *
       if (event.shiftKey && selected) {
         replaceSelectedText(target, '*' + selected + '*')
@@ -176,7 +217,6 @@ window.addEventListener('keydown', function (event) {
       if (event.shiftKey) {
         replaceSelectedText(target, '"' + selected + '"')
       } else {
-        var start = target.selectionStart || getCaretPosition(target)
         if (selected || start === 0 || /\s/.test(value.charAt(start - 1))) {
           replaceSelectedText(target, '\'' + selected + '\'')
         } else {
