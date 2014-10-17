@@ -217,7 +217,7 @@ window.addEventListener('keydown', function (event) {
       if (event.shiftKey) {
         replaceSelectedText(target, '"' + selected + '"')
       } else {
-        if (selected || start === 0 || /\s/.test(value.charAt(start - 1))) {
+        if (selected || start === 0 || /\W/.test(value.charAt(start - 1))) {
           replaceSelectedText(target, '\'' + selected + '\'')
         } else {
           break
