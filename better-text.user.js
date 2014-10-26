@@ -4,6 +4,7 @@
 // @description Add quotes, parens, etc around selected text
 // @match      http://*/*
 // @match      https://*/*
+// @exclude    https://gist.github.com/*
 // ==/UserScript==
 
 
