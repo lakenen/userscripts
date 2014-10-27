@@ -12,7 +12,7 @@ function getSelectionText() {
   var text = ''
   if (window.getSelection) {
     text = window.getSelection().toString()
-  } else if (document.selection && document.selection.type != 'Control') {
+  } else if (document.selection && document.selection.type !== 'Control') {
     text = document.selection.createRange().text
   }
   return text
@@ -34,7 +34,7 @@ function getCaretPosition(element) {
       , preCaretRange
       , textRange
       , preCaretTextRange
-    if (typeof win.getSelection != undefined) {
+    if (typeof win.getSelection !== undefined) {
         sel = win.getSelection()
         if (sel.rangeCount > 0) {
             range = win.getSelection().getRangeAt(0)
@@ -43,7 +43,7 @@ function getCaretPosition(element) {
             preCaretRange.setEnd(range.endContainer, range.endOffset)
             caretOffset = preCaretRange.toString().length
         }
-    } else if ( (sel = doc.selection) && sel.type != Control) {
+    } else if ( (sel = doc.selection) && sel.type !== 'Control') {
         textRange = sel.createRange()
         preCaretTextRange = doc.body.createTextRange()
         preCaretTextRange.moveToElementText(element)
