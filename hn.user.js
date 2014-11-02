@@ -6,7 +6,7 @@
 // ==/UserScript==
 
 
-var cssTemplate = '.{{id}} ~ .{{id}}, .{{id}} .comment { display: none }';
+var cssTemplate = '.{{id}} ~ .{{id}}, .{{id}} .comment, .{{id}} .default p { display: none }';
 var stylesheet = createStylesheet().sheet;
 
 [].forEach.call(document.querySelectorAll('a'), function (a) {
@@ -51,11 +51,12 @@ var root = { level: -1, children: [] }, prevNode = root;
   }
 })
 
+var currentId = 0
 addCollapseClasses(root, '')
 
 function addCollapseClasses(obj, classes) {
   obj.children.forEach(function (child, i) {
-    var id = 'comments-' + i + '-' + child.level
+    var id = 'comments-' + currentId++
     var newClasses = classes + ' ' + id
     child.id = id
     newClasses.trim().split(' ').forEach(function (cls) {
